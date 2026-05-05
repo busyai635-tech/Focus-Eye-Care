@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Outfit", sans-serif;
+    
+    --color-clinic-primary: #022c22;
+    --color-clinic-secondary: #059669;
+    --color-clinic-gold: #10b981;
+    --color-clinic-soft-green: #ecfdf5;
+}
+
+@layer base {
+    body {
+        @apply font-sans text-clinic-primary bg-white selection:bg-clinic-secondary/20 overflow-x-hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-display tracking-tight;
+    }
+}
+
+@layer components {
+    .glass-nav {
+        @apply backdrop-blur-md bg-white/80 border-b border-gray-100;
+    }
+    .premium-shadow {
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    }
+    .nav-link {
+        @apply text-sm font-medium transition-colors relative;
+    }
+    
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--color-clinic-secondary);
+        transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+        width: 100%;
+    }
+}
+
+/* Base Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Staggered Delays for elements inside reveal */
+.reveal.active .delay-100 { transition-delay: 100ms; }
+.reveal.active .delay-200 { transition-delay: 200ms; }
+.reveal.active .delay-300 { transition-delay: 300ms; }
+.reveal.active .delay-400 { transition-delay: 400ms; }
+
+/* Custom Keyframes */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(13, 148, 136, 0); }
+    100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+}
+
+.pulse-button {
+    animation: pulse-ring 2s infinite;
+}
+
+/* Card Hover Animation */
+.card-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+}

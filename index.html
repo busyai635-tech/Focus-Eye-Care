@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCUS| Premium Eye Care</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS 4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.9/dist/lenis.css">
+
+    <style type="text/tailwindcss">
+@theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Outfit", sans-serif;
+    
+    --color-clinic-primary: #022c22;
+    --color-clinic-secondary: #059669;
+    --color-clinic-gold: #10b981;
+    --color-clinic-soft-green: #ecfdf5;
+}
+
+@layer base {
+    body {
+        @apply font-sans text-clinic-primary bg-white selection:bg-clinic-secondary/20 overflow-x-hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-display tracking-tight;
+    }
+}
+
+@layer components {
+    .glass-nav {
+        @apply backdrop-blur-md bg-white/80 border-b border-gray-100;
+    }
+    .premium-shadow {
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    }
+    .nav-link {
+        @apply text-sm font-medium transition-colors relative;
+    }
+    
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--color-clinic-secondary);
+        transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+        width: 100%;
+    }
+}
+
+/* Base Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Staggered Delays for elements inside reveal */
+.reveal.active .delay-100 { transition-delay: 100ms; }
+.reveal.active .delay-200 { transition-delay: 200ms; }
+.reveal.active .delay-300 { transition-delay: 300ms; }
+.reveal.active .delay-400 { transition-delay: 400ms; }
+
+/* Custom Keyframes */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(13, 148, 136, 0); }
+    100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+}
+
+.pulse-button {
+    animation: pulse-ring 2s infinite;
+}
+
+/* Card Hover Animation */
+.card-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+}
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-5">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <i data-lucide="eye" id="nav-logo-icon" class="w-8 h-8 text-white transition-colors"></i>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-clinic-gold rounded-full"></div>
+                </div>
+                <span id="nav-logo-text" class="text-2xl font-display font-bold tracking-tight text-white transition-colors">FOCUS</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#about" class="nav-link text-white/80 hover:text-white">About</a>
+                <a href="#services" class="nav-link text-white/80 hover:text-white">Services</a>
+                <a href="#doctor" class="nav-link text-white/80 hover:text-white">Doctor</a>
+                <a href="#appointment" class="bg-clinic-secondary hover:bg-clinic-secondary/90 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all premium-shadow pulse-button">
+                    Book Appointment
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-toggle" class="md:hidden text-white transition-colors">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-gray-100 p-6 flex flex-col gap-4 shadow-xl transition-all duration-300 origin-top -translate-y-4 opacity-0 pointer-events-none">
+            <a href="#about" class="text-gray-600 font-medium text-lg py-2 active:scale-95 transition-transform">About</a>
+            <a href="#services" class="text-gray-600 font-medium text-lg py-2">Services</a>
+            <a href="#doctor" class="text-gray-600 font-medium text-lg py-2">Doctor</a>
+            <a href="#appointment" class="bg-clinic-secondary text-white py-3 rounded-xl font-bold mt-2 text-center">
+                Book Appointment
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative min-h-[100svh] flex items-center overflow-hidden">
+            <div class="absolute inset-0 z-0 scale-110" id="hero-bg">
+                <div class="absolute inset-0 bg-black/40 z-10"></div>
+                <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=2000" 
+                     class="w-full h-full object-cover" alt="Hero">
+            </div>
+
+            <div class="relative z-20 max-w-7xl mx-auto px-6 pt-20">
+                <div class="max-w-2xl reveal active" style="transition-delay: 200ms">
+                    <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-white text-xs font-bold tracking-widest uppercase mb-6 border border-white/20">
+                        Premium Vision Care
+                    </span>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl text-white font-bold mb-6 leading-[1.1]">
+                        Clear Vision.<br>
+                        <span class="text-clinic-gold">Better Life.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-white/80 mb-10 leading-relaxed font-light">
+                        Advanced ophthalmic care delivered with a personal touch. Experience the next generation of eye health at Lumina.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#appointment" class="px-8 py-4 bg-white text-clinic-primary rounded-full font-bold text-base hover:bg-clinic-soft-green active:scale-95 transition-all premium-shadow flex items-center justify-center gap-2 group text-center">
+                            Book Appointment
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#about" class="px-8 py-4 border border-white/30 backdrop-blur-md text-white rounded-full font-bold text-base hover:bg-white/10 active:scale-95 transition-all text-center">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 animate-bounce">
+                <span class="text-white/40 text-[10px] font-bold tracking-widest uppercase">Scroll</span>
+                <div class="w-px h-12 bg-gradient-to-b from-white/40 to-transparent"></div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-16 lg:py-24 bg-white reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+                    <div class="relative">
+                        <div class="aspect-[4/5] rounded-3xl overflow-hidden premium-shadow">
+                            <img src="./philosophy_eye_exam.png" 
+                                 class="w-full h-full object-cover" alt="Patient Eye Exam">
+                        </div>
+                        <div class="absolute -bottom-10 -right-10 bg-clinic-soft-green p-8 rounded-3xl hidden lg:block premium-shadow border border-white max-w-sm">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 bg-clinic-secondary/10 rounded-full flex items-center justify-center">
+                                    <i data-lucide="heart-pulse" class="text-clinic-secondary w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-clinic-primary">25+</p>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Years of Care</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed italic">
+                                "We don't just treat eyes; we treat people who see the world through them."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="mb-12">
+                            <span class="text-clinic-secondary font-bold tracking-widest uppercase text-xs mb-3 block">Philosophy</span>
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-clinic-primary leading-tight">Care with Expertise</h2>
+                        </div>
+                        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                            Founded on the principle of human-centered medicine, Lumina Eye Clinic combines world-class surgical expertise with a warmth that puts every patient at ease.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-clinic-soft-green flex items-center justify-center shrink-0">
+                                    <i data-lucide="shield" class="w-5 h-5 text-clinic-secondary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-clinic-primary">Trusted Care</h4>
+                                    <p class="text-sm text-gray-500">Recognized excellence</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-clinic-soft-green flex items-center justify-center shrink-0">
+                                    <i data-lucide="star" class="w-5 h-5 text-clinic-secondary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-clinic-primary">Patient First</h4>
+                                    <p class="text-sm text-gray-500">Tailored treatments</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-16 lg:py-24 bg-clinic-soft-green/50 reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12 md:mb-16">
+                    <span class="text-clinic-secondary font-bold tracking-widest uppercase text-xs mb-3 block">What We Do</span>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-clinic-primary leading-tight">Comprehensive Eye Care</h2>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="reveal delay-[100ms] bg-gradient-to-br from-white to-emerald-50/80 p-8 rounded-3xl premium-shadow border border-emerald-100/50 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] transition-all duration-500 group">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-clinic-secondary group-hover:text-white transition-colors">
+                            <i data-lucide="eye" class="w-7 h-7 text-clinic-secondary group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 text-clinic-primary group-hover:text-clinic-secondary">Standard Checkups</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Comprehensive vision testing and early disease detection.</p>
+                    </div>
+
+                    <div class="reveal delay-[200ms] bg-gradient-to-br from-white to-teal-50/80 p-8 rounded-3xl premium-shadow border border-teal-100/50 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] transition-all duration-500 group">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-clinic-secondary group-hover:text-white transition-colors">
+                            <i data-lucide="stethoscope" class="w-7 h-7 text-clinic-secondary group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 text-clinic-primary group-hover:text-clinic-secondary">Cataract Surgery</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Next-gen lens replacement with rapid recovery time.</p>
+                    </div>
+
+                    <div class="reveal delay-[300ms] bg-gradient-to-br from-white to-green-50/80 p-8 rounded-3xl premium-shadow border border-green-100/50 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] transition-all duration-500 group">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-clinic-secondary group-hover:text-white transition-colors">
+                            <i data-lucide="microscope" class="w-7 h-7 text-clinic-secondary group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 text-clinic-primary group-hover:text-clinic-secondary">Retina Care</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Specialized treatment for macular and diabetic eye health.</p>
+                    </div>
+
+                    <div class="reveal delay-[400ms] bg-gradient-to-br from-white to-clinic-soft-green p-8 rounded-3xl premium-shadow border border-clinic-soft-green hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(5,150,105,0.2)] transition-all duration-500 group">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-clinic-secondary group-hover:text-white transition-colors">
+                            <i data-lucide="award" class="w-7 h-7 text-clinic-secondary group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 text-clinic-primary group-hover:text-clinic-secondary">LASIK Vision</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Precision laser correction for freedom from glasses.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctor Section -->
+        <section id="doctor" class="py-16 lg:py-24 bg-white reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                    <div class="relative">
+                        <div class="aspect-square rounded-[40px] overflow-hidden premium-shadow relative z-10 animate-float">
+                            <img src="https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=crop&q=80&w=1200" 
+                                 class="w-full h-full object-cover object-top" alt="Doctor">
+                        </div>
+                        <div class="absolute -top-10 -left-10 w-64 h-64 bg-clinic-secondary/5 rounded-full blur-3xl"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-clinic-gold/20 rounded-[40px] translate-x-4 translate-y-4 -z-10"></div>
+                    </div>
+
+                    <div>
+                        <div class="mb-8">
+                            <span class="text-clinic-secondary font-bold tracking-widest uppercase text-xs mb-3 block">Our Lead Specialist</span>
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-clinic-primary leading-tight">Meet Dr. Elena Lumis</h2>
+                        </div>
+                        <p class="text-xl font-medium text-clinic-secondary mb-4">M.D., Board Certified Ophthalmologist</p>
+                        <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                            With over 18 years of specialized experience in refractive surgery and advanced retina care, Dr. Elena Lumis has transformed the lives of thousands through her precision and compassionate approach.
+                        </p>
+                        <div class="flex flex-wrap gap-4 mt-8">
+                            <div class="px-6 py-3 bg-clinic-soft-green border border-clinic-secondary/10 rounded-2xl">
+                                <p class="text-2xl font-bold text-clinic-primary">15k+</p>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest text-[10px]">Successful Surgeries</p>
+                            </div>
+                            <div class="px-6 py-3 bg-clinic-soft-green border border-clinic-secondary/10 rounded-2xl">
+                                <p class="text-2xl font-bold text-clinic-primary">99%</p>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest text-[10px]">Patient Satisfaction</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section class="py-16 lg:py-24 bg-white reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div>
+                        <div class="mb-12">
+                            <span class="text-clinic-secondary font-bold tracking-widest uppercase text-xs mb-3 block">Daily Insights</span>
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-clinic-primary leading-tight">Preserving Your Sight</h2>
+                        </div>
+                        <p class="text-lg text-gray-600 mb-10 leading-relaxed">
+                            Vision health extends beyond our clinic walls. Small daily rituals can significantly protect your eyes from the stresses of modern digital life.
+                        </p>
+                        <ul class="space-y-6">
+                            <li class="flex flex-col gap-1">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-2 h-2 rounded-full bg-clinic-secondary"></div>
+                                    <span class="font-bold text-clinic-primary tracking-tight">The 20-20-20 Rule</span>
+                                </div>
+                                <p class="text-gray-500 text-sm ml-6">Every 20 minutes, look at something 20 feet away for 20 seconds.</p>
+                            </li>
+                            <li class="flex flex-col gap-1">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-2 h-2 rounded-full bg-clinic-secondary"></div>
+                                    <span class="font-bold text-clinic-primary tracking-tight">Optimal Hydration</span>
+                                </div>
+                                <p class="text-gray-500 text-sm ml-6">Maintain natural tear production by staying hydrated throughout the day.</p>
+                            </li>
+                            <li class="flex flex-col gap-1">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-2 h-2 rounded-full bg-clinic-secondary"></div>
+                                    <span class="font-bold text-clinic-primary tracking-tight">UV Protection</span>
+                                </div>
+                                <p class="text-gray-500 text-sm ml-6">Always wear balanced UV-filter lenses, even on overcast days.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="relative h-full flex flex-col justify-center">
+                        <div class="rounded-3xl overflow-hidden premium-shadow aspect-square relative z-10">
+                            <img src="./daily_insights_eye.png" 
+                                 class="w-full h-full object-cover" alt="Eye Care">
+                        </div>
+                        <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-clinic-soft-green rounded-full blur-3xl -z-10"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patient Experience Section -->
+        <section id="reviews" class="py-16 lg:py-24 bg-clinic-soft-green/30 reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 lg:mb-16">
+                    <div>
+                        <span class="text-clinic-secondary font-bold tracking-widest uppercase text-xs mb-3 block">Patient Experience</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-clinic-primary leading-tight">What Our Patients Say</h2>
+                    </div>
+                    
+                    <!-- Google Rating Badge -->
+                    <div class="flex items-center gap-4 bg-white px-6 py-4 rounded-2xl premium-shadow border border-gray-100">
+                        <div class="flex items-center justify-center w-12 h-12 bg-red-50 rounded-full">
+                            <svg class="w-6 h-6 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-xl font-bold text-clinic-primary">4.8</span>
+                                <div class="flex text-amber-400">
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current text-amber-400/30"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 font-medium">Based on 43 Google Reviews</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Review 1 -->
+                    <div class="bg-white p-8 rounded-3xl premium-shadow border border-gray-100 hover:-translate-y-2 transition-all duration-300">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold text-xl">A</div>
+                                <div>
+                                    <h4 class="font-bold text-clinic-primary">ATHARV</h4>
+                                    <p class="text-xs text-gray-500">2 years ago</p>
+                                </div>
+                            </div>
+                            <div class="flex text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed italic">
+                            "Dr.Neha Ma'am connects with her patients at a personal level which gives significant reassurance and in turn helps healing. Very honest and positive approach in treatment which is a rarity in today's highly commercialized medical fraternity."
+                        </p>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="bg-white p-8 rounded-3xl premium-shadow border border-gray-100 hover:-translate-y-2 transition-all duration-300">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-bold text-xl">S</div>
+                                <div>
+                                    <h4 class="font-bold text-clinic-primary">Sukriti Dhakre</h4>
+                                    <p class="text-xs text-gray-500">2 years ago</p>
+                                </div>
+                            </div>
+                            <div class="flex text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed italic">
+                            "This was our third opinion consultation, and I am finally satisfied now. Dr Neha is amazing doctor. Had amazing experience. She explained everything really well and we are clear on what exactly happened."
+                        </p>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="bg-white p-8 rounded-3xl premium-shadow border border-gray-100 hover:-translate-y-2 transition-all duration-300">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center font-bold text-xl">A</div>
+                                <div>
+                                    <h4 class="font-bold text-clinic-primary">Anish Desai</h4>
+                                    <p class="text-xs text-gray-500">3 years ago</p>
+                                </div>
+                            </div>
+                            <div class="flex text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed italic">
+                            "Clean and hygienic eye clinic at Undri. Good Diagonostics By Dr. Neha Abad and a proper eye check and suggestions. Getting a variety of stylish specks in same clinic with glasses as well saves a lot of time for patients."
+                        </p>
+                    </div>
+
+                    <!-- Review 4 -->
+                    <div class="bg-white p-8 rounded-3xl premium-shadow border border-gray-100 hover:-translate-y-2 transition-all duration-300">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-pink-100 text-pink-700 rounded-full flex items-center justify-center font-bold text-xl">R</div>
+                                <div>
+                                    <h4 class="font-bold text-clinic-primary">Reena Joseph</h4>
+                                    <p class="text-xs text-gray-500">Local Guide · 2 years ago</p>
+                                </div>
+                            </div>
+                            <div class="flex text-amber-400"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed italic">
+                            "Dr Neha is very good and knowledgeable and especially with my kid, she is so understanding and caring like his friend. Spectacle quality is also good. She assisted patiently in choosing the right one."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointment Section -->
+        <section id="appointment" class="py-16 lg:py-24 bg-gradient-to-br from-white via-white to-clinic-soft-green/50 reveal relative overflow-hidden">
+            <!-- Decorative Background Elements -->
+            <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-clinic-secondary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-clinic-soft-green/50 rounded-full blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
+
+            <div class="max-w-4xl mx-auto px-6 relative z-10">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-[40px] p-8 md:p-16 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-white/80">
+                    <div class="text-center mb-12">
+                        <span class="text-clinic-secondary font-bold tracking-widest uppercase text-xs mb-3 block animate-float">Booking</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-clinic-primary leading-tight">Request an Appointment</h2>
+                        <p class="text-gray-500 font-medium mt-4">Connect with our specialists for a personalized vision assessment.</p>
+                    </div>
+                    
+                    <form class="grid md:grid-cols-2 gap-8" onsubmit="event.preventDefault()">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-clinic-secondary ml-1">Full Name</label>
+                            <input type="text" placeholder="John Doe" class="w-full px-6 py-4 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-100 focus:bg-white focus:border-clinic-secondary focus:ring-4 focus:ring-clinic-secondary/10 outline-none transition-all shadow-sm">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-clinic-secondary ml-1">Email Address</label>
+                            <input type="email" placeholder="john@example.com" class="w-full px-6 py-4 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-100 focus:bg-white focus:border-clinic-secondary focus:ring-4 focus:ring-clinic-secondary/10 outline-none transition-all shadow-sm">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-clinic-secondary ml-1">Preferred Date</label>
+                            <input type="date" class="w-full px-6 py-4 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-100 focus:bg-white focus:border-clinic-secondary focus:ring-4 focus:ring-clinic-secondary/10 outline-none transition-all shadow-sm text-gray-500">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-clinic-secondary ml-1">Service Needed</label>
+                            <div class="relative">
+                                <select class="w-full px-6 py-4 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-100 focus:bg-white focus:border-clinic-secondary focus:ring-4 focus:ring-clinic-secondary/10 outline-none transition-all shadow-sm appearance-none cursor-pointer text-gray-600">
+                                    <option>General Eye Checkup</option>
+                                    <option>Cataract Consultation</option>
+                                    <option>LASIK Screening</option>
+                                    <option>Other Services</option>
+                                </select>
+                                <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-clinic-secondary">
+                                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2 space-y-3">
+                            <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-clinic-secondary ml-1">Message (Optional)</label>
+                            <textarea placeholder="How can we help you today?" rows="4" class="w-full px-6 py-4 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-100 focus:bg-white focus:border-clinic-secondary focus:ring-4 focus:ring-clinic-secondary/10 outline-none transition-all shadow-sm resize-none"></textarea>
+                        </div>
+                        <button class="md:col-span-2 py-5 bg-gradient-to-r from-clinic-secondary to-teal-500 text-white rounded-2xl font-bold text-lg hover:shadow-lg hover:shadow-clinic-secondary/30 hover:-translate-y-1 active:scale-95 transition-all mt-4 flex items-center justify-center gap-2 group">
+                            Submit Request
+                            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-20 reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="bg-clinic-secondary rounded-[40px] overflow-hidden relative px-10 py-20 text-center">
+                    <div class="relative z-10 max-w-2xl mx-auto">
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">Experience Clarity Today</h2>
+                        <p class="text-white/80 text-lg mb-10 leading-relaxed">
+                            Join thousands of patients who have rediscovered the world through our care. Your vision journey starts with a single click.
+                        </p>
+                        <a href="#appointment" class="px-10 py-4 bg-white text-clinic-secondary rounded-full font-bold text-lg hover:bg-clinic-soft-green active:scale-95 transition-all premium-shadow inline-block group">
+                            Schedule Your Visit
+                            <i data-lucide="arrow-right" class="inline-block ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+                    <div class="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white pt-20 pb-10 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+            <div class="max-w-xs">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="eye" class="w-6 h-6 text-clinic-secondary"></i>
+                    <span class="text-xl font-display font-bold tracking-tight text-clinic-primary">LUMINA</span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Premium eye care with a human touch. Leading the future of ophthalmology.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all shadow-sm">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 hover:bg-gradient-to-tr hover:from-amber-400 hover:via-rose-500 hover:to-fuchsia-600 hover:text-white transition-all shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex gap-16">
+                <div>
+                    <h4 class="font-bold text-clinic-primary mb-4 text-sm uppercase tracking-widest">Connect</h4>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-3 h-3"></i> +1 (212) 555-0198</li>
+                        <li class="flex items-center gap-2"><i data-lucide="mail" class="w-3 h-3"></i> care@lumina.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-clinic-primary mb-4 text-sm uppercase tracking-widest">Location</h4>
+                    <p class="text-sm text-gray-500 max-w-[180px]">1200 Vision Plaza, Medical District, NY</p>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] flex justify-between">
+            <p>© 2026 Lumina Eye. Excellence in vision.</p>
+            <div class="flex gap-6">
+                <span>Privacy</span>
+                <span>Terms</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
