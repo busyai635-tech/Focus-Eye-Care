@@ -104,3 +104,13 @@ window.addEventListener('scroll', () => {
     let scrollPosition = window.pageYOffset;
     parallax.style.transform = 'translateY(' + scrollPosition * 0.4 + 'px) scale(1.1)';
 });
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        lenis.scrollTo(this.getAttribute('href'), {
+            offset: -80 // Offset for fixed navbar
+        });
+    });
+});
